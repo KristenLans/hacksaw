@@ -1,4 +1,5 @@
-class Graphite# < ActiveRecord::Base
+class Graphite
+  require 'json'
   require 'net/http'
 
   #Graphite.new #cranks webservice call to graphite
@@ -13,21 +14,25 @@ class Graphite# < ActiveRecord::Base
     self.graphite_url = graphite_host
   end
 
-  def json(target, params = {})
+  def prepare_url(target, params = {})
     url = self.graphite_url + '/render/?target=' + target + '&format=json'
     params.each{ |key, value| url << "&#{key}=#{value}" }
-    JSON.parse(Net::HTTP.get_response(URI.parse(url)).body)
+    url
   end
 
-  def value(target, params)
+  def json(target, params = {})
+    JSON.parse(Net::HTTP.get_response(URI.parse(prepare_url(target, params))).body)
+  end
+
+  def value(target, params = {})
     self.datapoints(target, params).last.first
   end
 
-  def datapoints(target, params)
-    self.json(target, params).last['datapoints']
+  def datapoints(target, params = {})
+    self.json(target, params).first['datapoints']
   end
 
-  def data_for_Google_annotated_time_chart(target, params)
+  def data_for_Google_annotated_time_chart(target, params = {})
     datapoints(target, params).collect do |data|
       value = data.first
       unix_time = data.last
