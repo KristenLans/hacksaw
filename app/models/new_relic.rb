@@ -3,6 +3,10 @@ class NewRelic
   APP = 446884
   ACC = 5035
 
+  def self.link
+    "https://rpm.newrelic.com/accounts/#{ACC}/applications/#{APP}"
+  end
+
   def self.apdex_day
     JSON.parse(curl("data.json?metrics[]=EndUser/Apdex&field=score&begin=#{yesterday}&end=#{today}"))
   end

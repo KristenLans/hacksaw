@@ -3,12 +3,18 @@
 .apdex
   %h2
     Apdex:
+  %small
+    (via
+    = link_to("New Relic", NewRelic.link)
+    )
   %p
-    %span.avg= NewRelic.apdex_day_avg
+    %span.avg
+      = number_to_human(NewRelic.apdex_day_avg.to_f, precision: 2)
+      (avg)
     \/
-    %span.now= NewRelic.apdex
-
-
+    %span.now
+      = number_to_human(NewRelic.apdex.to_f, precision: 2)
+      (now)
 
 %div{ style: 'float: left; margin-left: 50px' }
   = render :partial => 'google_charts/annotated_time', locals: { chart_data: @api_searches,
