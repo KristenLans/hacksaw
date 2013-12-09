@@ -30,3 +30,9 @@
     = render partial: 'google_charts/annotated_time', locals: { chart_data: @slave_lag,
       title: "Slave Lag", width: 500, height: 300 }
 = render partial: 'graphite/custom_form'
+.links
+  %h2
+    See also
+  %ul
+    %li= link_to("Google Analytics", 'https://www.google.com/analytics/web/?hl=en#report/visitors-overview/a3298646w49390608p50573492/')
+    %li= link_to("Jiration", 'http://issues.eol.org/')
