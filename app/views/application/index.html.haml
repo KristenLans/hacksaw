@@ -16,6 +16,12 @@
     %span.now
       = number_to_human(NewRelic.apdex.to_f, precision: 2)
       (now)
+
+.servers
+  %h3
+    Servers Behaving:
+    = "#{@servers_online}/#{@servers_total}"
+  
 #charts
   .left
     = render partial: 'google_charts/annotated_time', locals: { chart_data: @api_searches,

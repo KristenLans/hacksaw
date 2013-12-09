@@ -17,5 +17,9 @@ class ApplicationController < ActionController::Base
       'hitcount(stats.timers.page_load_time.api.search.count_ps,\'1hour\')', from: DEFAULT_TIME_RANGE)
     @slave_lag = g.data_for_Google_annotated_time_chart(
       'eol-db-slave1.mysql.general.slaveLag', from: DEFAULT_TIME_RANGE)
+    varnish = Varnish.latest
+    @servers_online = varnish.map{|server| server['health'] == "Healthy"}.count(true)
+    @servers_offline = varnish.map{|server| server['health'] == "Healthy"}.count(false)
+    @servers_total = @servers_online + @servers_offline
   end
 end
