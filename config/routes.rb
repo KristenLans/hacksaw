@@ -14,9 +14,10 @@ Hacksaw::Application.routes.draw do
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
 
-  resource :test do
+  resource :graphite, controller: 'graphite' do
     member do
-      get 'google'
+      get 'custom'
+      get 'autocomplete_metrics'
     end
   end
 

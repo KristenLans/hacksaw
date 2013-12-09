@@ -14,14 +14,19 @@ class Graphite
     self.graphite_url = graphite_host
   end
 
-  def prepare_url(target, params = {})
+  ## Sample /render Parameters
+  # target = movingAverage(stats.timers.page_load_time.search.index.mean,10)
+  # from = -136hours
+  # to = -24hours
+
+  def prepare_render_url(target, params = {})
     url = self.graphite_url + '/render/?target=' + target + '&format=json'
-    params.each{ |key, value| url << "&#{key}=#{value}" }
+    params.each{ |key, value| url << "&#{key}=#{value}" unless key.blank? || value.blank? }
     url
   end
 
   def json(target, params = {})
-    JSON.parse(Net::HTTP.get_response(URI.parse(prepare_url(target, params))).body)
+    JSON.parse(Net::HTTP.get_response(URI.parse(prepare_render_url(target, params))).body)
   end
 
   def value(target, params = {})
@@ -40,8 +45,12 @@ class Graphite
     end.delete_if{ |d| d[:value].nil? }
   end
 
-  #from=-136hours&to=-24hours
-  #movingAverage(stats.timers.page_load_time.search.index.mean,10)
+  def all_possible_metrics
+    Rails.cache.fetch('all_metrics') do
+      metrics = JSON.parse(Net::HTTP.get_response(URI.parse(self.graphite_url + '/metrics/index.json')).body)
+      metrics.collect{ |m| m[1..-1] }
+    end
+  end
 
 end
 

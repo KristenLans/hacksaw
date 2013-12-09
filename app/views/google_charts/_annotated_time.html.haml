@@ -2,8 +2,6 @@
 - chart_data = [] unless chart_data
 - width = 800 unless width
 - height = 400 unless height
-= javascript_include_tag "https://www.google.com/jsapi"
-= javascript_include_tag "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
 :javascript
   google.load('visualization', '1', {'packages':['annotatedtimeline']});
   google.setOnLoadCallback(drawChart);
@@ -14,8 +12,8 @@
     data.addRows([
       [ #{ chart_data.collect{ |d| [ d[:date], d[:value] ].join(",") }.join("],[") } ]
     ]);
-    var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('#{title.downcase.tr(" ", "_")}'));
+    var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('#{title.downcase.tr(" .", "_")}'));
     chart.draw(data, {displayAnnotations: true, dateFormat: 'HH:mm MMMM dd, yyyy'});
   }
 %h3= title
-%div{ id: title.downcase.tr(" ", "_"), style: "width: #{width}px; height: #{height}px;" }
+%div{ id: title.downcase.tr(" .", "_"), style: "width: #{width}px; height: #{height}px;" }

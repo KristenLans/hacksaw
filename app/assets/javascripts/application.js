@@ -14,4 +14,9 @@
 //= require jquery_ujs
 //= require d3
 //= require turbolinks
+//= require jquery-ui-1.10.3.custom.min.js
 //= require_tree .
+
+$(function() {
+  $("form #target").autocomplete({ source: "/graphite/autocomplete_metrics" });
+});

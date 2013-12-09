@@ -1,19 +1,20 @@
 %h1= "EOL Fancy Charts And Graphs"
 
-
 %div{ style: 'float: left; margin-left: 50px' }
-  = render :partial => 'google_charts/annotated_time', locals: { chart_data: @api_searches,
+  = render partial: 'google_charts/annotated_time', locals: { chart_data: @api_searches,
     title: "API Searches", width: 500, height: 300 }
 
 %div{ style: 'float: right; margin-right: 50px' }
-  = render :partial => 'google_charts/annotated_time', locals: { chart_data: @home_page_load_time_data,
+  = render partial: 'google_charts/annotated_time', locals: { chart_data: @home_page_load_time_data,
     title: "Home Page Load Time", width: 500, height: 300 }
 
 %br
 %div{ style: 'float: left; margin-left: 50px' }
-  = render :partial => 'google_charts/annotated_time', locals: { chart_data: @taxa_page_load_time_data,
+  = render partial: 'google_charts/annotated_time', locals: { chart_data: @taxa_page_load_time_data,
     title: "Taxa Page Load Time", width: 500, height: 300 }
 
 %div{ style: 'float: right; margin-right: 50px' }
-  = render :partial => 'google_charts/annotated_time', locals: { chart_data: @slave_lag,
+  = render partial: 'google_charts/annotated_time', locals: { chart_data: @slave_lag,
     title: "Slave Lag", width: 500, height: 300 }
+
+= render partial: 'graphite/custom_form'
