@@ -63,4 +63,4 @@ gem 'haml', '4.0.4'
 
 # This Gemfile is brilliantly sorted.  :|
 # Curb allows Curl::Easy and Curl::Multi, which we use to talk to APIs.
-gem 'curb' 
+gem 'curb'
