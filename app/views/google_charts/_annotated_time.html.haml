@@ -1,5 +1,7 @@
-- title = 'Default Chart Title' unless defined?(title)
-- chart_data = [] unless defined?(chart_data)
+- title = 'Default Chart Title' unless title
+- chart_data = [] unless chart_data
+- width = 800 unless width
+- height = 400 unless height
 = javascript_include_tag "https://www.google.com/jsapi"
 = javascript_include_tag "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
 :javascript
@@ -12,8 +14,8 @@
     data.addRows([
       [ #{ chart_data.collect{ |d| [ d[:date], d[:value] ].join(",") }.join("],[") } ]
     ]);
-    var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
-    chart.draw(data, {displayAnnotations: true});
+    var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('#{title.downcase.tr(" ", "_")}'));
+    chart.draw(data, {displayAnnotations: true, dateFormat: 'HH:mm MMMM dd, yyyy'});
   }
 %h3= title
-#chart_div{ style: 'width: 800px; height: 400px;' }
+%div{ id: title.downcase.tr(" ", "_"), style: "width: #{width}px; height: #{height}px;" }
