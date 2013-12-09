@@ -10,7 +10,7 @@
   %p
     %span.avg
       = number_to_human(NewRelic.apdex_day_avg.to_f, precision: 2)
-      (avg)
+      (24h avg)
     \/
     %span.now
       = number_to_human(NewRelic.apdex.to_f, precision: 2)
