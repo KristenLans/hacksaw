@@ -1,0 +1,19 @@
+- title = 'Default Chart Title' unless defined?(title)
+- chart_data = [] unless defined?(chart_data)
+= javascript_include_tag "https://www.google.com/jsapi"
+= javascript_include_tag "//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"
+:javascript
+  google.load('visualization', '1', {'packages':['annotatedtimeline']});
+  google.setOnLoadCallback(drawChart);
+  function drawChart() {
+    var data = new google.visualization.DataTable();
+    data.addColumn('date', 'Date');
+    data.addColumn('number', '#{title} in ms');
+    data.addRows([
+      [ #{ chart_data.collect{ |d| [ d[:date], d[:value] ].join(",") }.join("],[") } ]
+    ]);
+    var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('chart_div'));
+    chart.draw(data, {displayAnnotations: true});
+  }
+%h3= title
+#chart_div{ style: 'width: 800px; height: 400px;' }

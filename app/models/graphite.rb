@@ -11,19 +11,28 @@ class Graphite# < ActiveRecord::Base
   
   def initialize(graphite_host)
     self.graphite_url = graphite_host
-   
   end
 
-  def json(target,params)
-    JSON.parse(Net::HTTP.get_response(URI.parse(self.graphite_url + '/render/?target=' + target + '&' + params + '&format=json')).body)
+  def json(target, params = {})
+    url = self.graphite_url + '/render/?target=' + target + '&format=json'
+    params.each{ |key, value| url << "&#{key}=#{value}" }
+    JSON.parse(Net::HTTP.get_response(URI.parse(url)).body)
   end
 
-  def value(target,params)
-    self.datapoints(target,params).last.first
+  def value(target, params)
+    self.datapoints(target, params).last.first
   end
 
-  def datapoints(target,params)
-    self.json(target,params).last['datapoints']
+  def datapoints(target, params)
+    self.json(target, params).last['datapoints']
+  end
+
+  def data_for_Google_annotated_time_chart(target, params)
+    datapoints(target, params).collect do |data|
+      value = data.first
+      unix_time = data.last
+      { date: Time.at(unix_time).strftime("new Date(%Y, %-m, %-d, %H, %M, %S)"), value: value }
+    end.delete_if{ |d| d[:value].nil? }
   end
 
   #from=-136hours&to=-24hours
