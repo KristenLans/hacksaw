@@ -21,6 +21,11 @@ class NewRelic
     apdex_day.last["score"]
   end
 
+  # TODO - this doesn't work because the .json returns xml.  :|
+  def self.thresholds
+    JSON.parse(curl("threshold_values.json"))
+  end
+
   private
 
     def self.yesterday
