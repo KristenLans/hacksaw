@@ -1,16 +1,19 @@
 #custom_chart_form
-  %h3= "Create A Custom Chart"
+  %h2= "Create A Custom Chart"
   = form_tag(custom_graphite_path, method: :get) do
     %ul
       %li
         = label_tag("Target")
-        = text_field_tag(:target, @target)
+        = text_field_tag(:target, @original_target)
+      %li
+        = label_tag("Target2")
+        = text_field_tag(:target2, @original_target2)
       %li
         = label_tag("From")
         = text_field_tag(:from, @from)
-      %li
-        = label_tag("To")
-        = text_field_tag(:to, @to)
+      / %li
+      /   = label_tag("To")
+      /   = text_field_tag(:to, @to)
       %li
         = label_tag("Interval")
         = text_field_tag(:interval, @interval)

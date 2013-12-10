@@ -30,19 +30,34 @@ class Graphite
   end
 
   def value(target, params = {})
-    self.datapoints(target, params).last.first
+    self.all_datapoints(target, params).select{ |row| ! row[1].nil? }.last[1] || 0
   end
 
-  def datapoints(target, params = {})
-    self.json(target, params).first['datapoints']
+  def all_datapoints(target, params = {})
+    datapoints_by_time = {}
+    self.json(target, params).collect{ |t| t['datapoints'] }.each_with_index do |target_data, index|
+      target_data.each do |row|
+        datapoints_by_time[row[1]] ||= []
+        datapoints_by_time[row[1]] << 0 until datapoints_by_time[row[1]].length == index
+        datapoints_by_time[row[1]] << (row[0].nil? ? 0 : row[0])
+      end
+    end
+    datapoints = []
+    datapoints_by_time.each do |time, data|
+      datapoints << [ time ] + data
+    end
+    datapoints
   end
 
   def data_for_Google_annotated_time_chart(target, params = {})
-    datapoints(target, params).collect do |data|
-      value = data.first
-      unix_time = data.last
-      { date: Time.at(unix_time).strftime("new Date(%Y, %-m, %-d, %H, %M, %S)"), value: value }
-    end.delete_if{ |d| d[:value].nil? }
+    converted_data = all_datapoints(target, params).collect! do |data|
+      values = data[1..-1]
+      unix_time = Time.at(data.first)
+      { date: unix_time.javascript_date, values: values, unix_time: data.last }
+    end
+    converted_data.each_with_index.collect do |d, index|
+      column_data = ([ d[:date] ] + d[:values]).join(",")
+    end
   end
 
   def all_possible_metrics

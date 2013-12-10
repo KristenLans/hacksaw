@@ -8,12 +8,23 @@
   function drawChart() {
     var data = new google.visualization.DataTable();
     data.addColumn('date', 'Date');
-    data.addColumn('number', '#{title} in ms');
+    data.addColumn('number', '#{title}');
+    #{ "data.addColumn('number', '#{title2} in ms');" if defined?(title2) && ! title2.blank? }
     data.addRows([
-      [ #{ chart_data.collect{ |d| [ d[:date], d[:value] ].join(",") }.join("],[") } ]
+      [ #{ chart_data.join("],[") } ]
     ]);
     var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('#{title.downcase.tr(" .", "_")}'));
-    chart.draw(data, {displayAnnotations: true, dateFormat: 'HH:mm MMMM dd, yyyy'});
+    chart.draw(data, {
+      displayAnnotations: true,
+      allValuesSuffix: ' ms',
+      dateFormat: 'HH:mm MMMM dd, yyyy',
+      legendPosition: 'newRow',
+      scaleColumns: [0, 1],
+      displayRangeSelector : true,
+      #{ "scaleType: 'allfixed'," unless defined?(dual_axis) && ! dual_axis }
+      zoomStartTime: #{(Time.now - 1.day).javascript_date },
+      zoomEndTime: #{(Time.now).javascript_date }
+      });
   }
-%h3= title
+%h2= title
 %div{ id: title.downcase.tr(" .", "_"), style: "width: #{width}px; height: #{height}px;" }

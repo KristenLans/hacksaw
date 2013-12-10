@@ -1,3 +1,4 @@
-= render :partial => 'google_charts/annotated_time', locals: { chart_data: @chart_data,
-  title: @search_target, width: 800, height: 500 }
+- if @chart_data
+  = render partial: 'google_charts/annotated_time', locals: { chart_data: @chart_data,
+    title: @original_target, title2: @original_target2, width: 800, height: 500 }
 = render partial: 'graphite/custom_form'

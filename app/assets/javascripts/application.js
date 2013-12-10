@@ -18,5 +18,5 @@
 //= require_tree .
 
 $(function() {
-  $("form #target").autocomplete({ source: "/graphite/autocomplete_metrics" });
+  $("form #target, form #target2").autocomplete({ source: "/graphite/autocomplete_metrics" });
 });

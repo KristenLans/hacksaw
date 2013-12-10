@@ -1,11 +1,11 @@
 require './spec/spec_helper.rb'
 
 def stub_render_request
-  stub_request(:get, @g.prepare_render_url(@test_target)).to_return(:body => @test_response)
+  stub_request(:get, @g.prepare_render_url(@test_target)).to_return(body: @test_response)
 end
 
 def stub_metrics_request
-  stub_request(:get, @g.graphite_url + '/metrics/index.json').to_return(:body => @test_metrics_response)
+  stub_request(:get, @g.graphite_url + '/metrics/index.json').to_return(body: @test_metrics_response)
 end
 
 describe Graphite do
@@ -36,17 +36,16 @@ describe Graphite do
     expect(@g.value(@test_target)).to eq(13)
   end
 
-  it 'should fetch all datapoints' do
+  it 'should fetch all all_datapoints' do
     stub_render_request
-    expect(@g.datapoints(@test_target)).to eq(JSON.parse(@test_response).first['datapoints'])
+    expect(@g.all_datapoints(@test_target)).to eq([ [ 1386124320, 12 ], [ 1386124380, 13 ] ])
   end
 
   it 'should prepare data for Google annotated time charts' do
     stub_render_request
     expect(@g.data_for_Google_annotated_time_chart(@test_target)).to eq(
-      [ { date: "new Date(2013, 12, 3, 21, 32, 00)", value: 12 },
-        { date: "new Date(2013, 12, 3, 21, 33, 00)", value: 13 }
-      ])
+      [ 'new Date(2013, 11, 3, 21, 32, 00),12',
+        'new Date(2013, 11, 3, 21, 33, 00),13' ])
   end
 
   it 'should prepare data for Google annotated time charts' do

@@ -7,7 +7,7 @@ class TestsController < ActionController::Base
     title = params[:title] || 'Chart Title'
     g = Graphite.new(Hacksaw::Application.config.graphite_endpoint)
     chart_data = g.data_for_Google_annotated_time_chart(params[:target], from: params[:from], to: params[:to])
-    render :partial => 'google_charts/annotated_time', locals: { chart_data: chart_data,
+    render partial: 'google_charts/annotated_time', locals: { chart_data: chart_data,
       title: title, width: 700, height: 300 }
   end
 end

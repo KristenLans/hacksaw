@@ -1,44 +1,51 @@
 = image_tag("hacksaw.png", style: "float: right")
 %h1= "EOL Fancy Charts And Graphs"
 
-.apdex
-  %h2
-    Apdex:
-  %small
-    (via
-    = link_to("New Relic", NewRelic.link)
-    )
-  %p
-    %span.avg
-      = number_to_human(NewRelic.apdex_day_avg.to_f, precision: 2)
-      (24h avg)
-    \/
-    %span.now
-      = number_to_human(NewRelic.apdex.to_f, precision: 2)
-      (now)
-
-.servers
-  %h3
-    Servers Behaving:
-    = "#{@servers_online}/#{@servers_total}"
-  
+%table#values
+  %tr
+    %th
+      Apdex
+      %small
+        (via
+        = link_to("New Relic", NewRelic.link)
+        )
+    %td
+      %span.avg
+        = number_to_human(NewRelic.apdex_day_avg.to_f, precision: 2)
+        (24h avg)
+      \/
+      %span.now
+        = number_to_human(NewRelic.apdex.to_f, precision: 2)
+        (now)
+  %tr
+    %th= "Servers Behaving"
+    %td= "#{@servers_online}/#{@servers_total}"
+  %tr
+    %th= "Current Slave Lag"
+    %td= "#{@current_slave_lag.round} ms"
+  %tr
+    %th= "Taxon Overview Load Time"
+    %td= "#{@current_taxon_page_load_time.round} ms (trend #{@recent_taxon_page_load_time.round} ms)"
+  %tr
+    %th= "Search API Load Time"
+    %td= "#{@current_search_api_load_time.round} ms (trend #{@recent_search_api_load_time.round} ms)"
+  %tr
+    %th= "See also"
+    %td
+      %ul
+        %li= link_to("Google Analytics", 'https://www.google.com/analytics/web/?hl=en#report/visitors-overview/a3298646w49390608p50573492/')
+        %li= link_to("Jiration", 'http://issues.eol.org/')
 #charts
+  .left
+    = render partial: 'google_charts/annotated_time', locals: { chart_data: @taxa_page_load_time_data,
+      title: "Taxa Page Load Time", title2: "Recent Trend", width: 500, height: 300, dual_axis: false }
+  .right
+    = render partial: 'google_charts/annotated_time', locals: { chart_data: @home_page_load_time_data,
+      title: "Home Page Load Time", title2: "Recent Trend", width: 500, height: 300, dual_axis: false }
   .left
     = render partial: 'google_charts/annotated_time', locals: { chart_data: @api_searches,
       title: "API Searches", width: 500, height: 300 }
   .right
-    = render partial: 'google_charts/annotated_time', locals: { chart_data: @home_page_load_time_data,
-      title: "Home Page Load Time", width: 500, height: 300 }
-  .left
-    = render partial: 'google_charts/annotated_time', locals: { chart_data: @taxa_page_load_time_data,
-      title: "Taxa Page Load Time", width: 500, height: 300 }
-  .right
     = render partial: 'google_charts/annotated_time', locals: { chart_data: @slave_lag,
       title: "Slave Lag", width: 500, height: 300 }
 = render partial: 'graphite/custom_form'
-.links
-  %h2
-    See also
-  %ul
-    %li= link_to("Google Analytics", 'https://www.google.com/analytics/web/?hl=en#report/visitors-overview/a3298646w49390608p50573492/')
-    %li= link_to("Jiration", 'http://issues.eol.org/')
