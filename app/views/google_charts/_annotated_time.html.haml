@@ -17,10 +17,11 @@
     chart.draw(data, {
       displayAnnotations: true,
       allValuesSuffix: ' ms',
+      displayZoomButtons: false,
       dateFormat: 'HH:mm MMMM dd, yyyy',
       legendPosition: 'newRow',
       scaleColumns: [0, 1],
-      #{ "scaleType: 'allfixed'," unless defined?(dual_axis) && ! dual_axis }
+      #{ "scaleType: " + ((defined?(dual_axis) && ! dual_axis) ? "'maximized'," : "'allmaximized',") }
       displayRangeSelector : true
       });
   }
