@@ -10,6 +10,8 @@ group :development do
   gem 'sqlite3'
 end
 
+gem 'rails_12factor', group: :production
+
 gem 'mysql2'
 
 # Use SCSS for stylesheets
