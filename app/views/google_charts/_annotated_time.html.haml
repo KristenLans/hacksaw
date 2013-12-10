@@ -20,10 +20,8 @@
       dateFormat: 'HH:mm MMMM dd, yyyy',
       legendPosition: 'newRow',
       scaleColumns: [0, 1],
-      displayRangeSelector : true,
       #{ "scaleType: 'allfixed'," unless defined?(dual_axis) && ! dual_axis }
-      zoomStartTime: #{(Time.now - 1.day).javascript_date },
-      zoomEndTime: #{(Time.now).javascript_date }
+      displayRangeSelector : true
       });
   }
 %h2= title

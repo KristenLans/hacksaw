@@ -38,14 +38,14 @@
 #charts
   .left
     = render partial: 'google_charts/annotated_time', locals: { chart_data: @taxa_page_load_time_data,
-      title: "Taxa Page Load Time", title2: "Recent Trend", width: 500, height: 300, dual_axis: false }
+      title: "Taxa Page Load Time", title2: "Recent Trend", width: 600, height: 400, dual_axis: false }
   .right
     = render partial: 'google_charts/annotated_time', locals: { chart_data: @home_page_load_time_data,
-      title: "Home Page Load Time", title2: "Recent Trend", width: 500, height: 300, dual_axis: false }
+      title: "Home Page Load Time", title2: "Recent Trend", width: 600, height: 400, dual_axis: false }
   .left
     = render partial: 'google_charts/annotated_time', locals: { chart_data: @api_searches,
-      title: "API Searches", width: 500, height: 300 }
+      title: "API Searches", width: 600, height: 400 }
   .right
     = render partial: 'google_charts/annotated_time', locals: { chart_data: @slave_lag,
-      title: "Slave Lag", width: 500, height: 300 }
+      title: "Slave Lag", width: 600, height: 400 }
 = render partial: 'graphite/custom_form'
