@@ -1,29 +1,31 @@
 - title = 'Default Chart Title' unless title
-- chart_data = [] unless chart_data
+- graphite_request = nil unless graphite_request
 - width = 800 unless width
 - height = 400 unless height
-:javascript
-  google.load('visualization', '1', {'packages':['annotatedtimeline']});
-  google.setOnLoadCallback(drawChart);
-  function drawChart() {
-    var data = new google.visualization.DataTable();
-    data.addColumn('date', 'Date');
-    data.addColumn('number', '#{title}');
-    #{ "data.addColumn('number', '#{title2} in ms');" if defined?(title2) && ! title2.blank? }
-    data.addRows([
-      [ #{ chart_data.join("],[") } ]
-    ]);
-    var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('#{title.downcase.tr(" .", "_")}'));
-    chart.draw(data, {
-      displayAnnotations: true,
-      allValuesSuffix: ' ms',
-      displayZoomButtons: false,
-      dateFormat: 'HH:mm MMMM dd, yyyy',
-      legendPosition: 'newRow',
-      scaleColumns: [0, 1],
-      #{ "scaleType: " + ((defined?(dual_axis) && ! dual_axis) ? "'maximized'," : "'allmaximized',") }
-      displayRangeSelector : true
-      });
-  }
-%h2= title
-%div{ id: title.downcase.tr(" .", "_"), style: "width: #{width}px; height: #{height}px;" }
+- unit = nil unless unit
+- if graphite_request
+  :javascript
+    google.load('visualization', '1', {'packages':['annotatedtimeline']});
+    google.setOnLoadCallback(drawChart);
+    function drawChart() {
+      var data = new google.visualization.DataTable();
+      data.addColumn('date', 'Date');
+      data.addColumn('number', '#{title.tr("'", "")}');
+      #{ "data.addColumn('number', '#{title2.tr("'", "")}');" if defined?(title2) && ! title2.blank? }
+      data.addRows([
+        [ #{ graphite_request.data_for_Google_annotated_time_chart.join("],[") } ]
+      ]);
+      var chart = new google.visualization.AnnotatedTimeLine(document.getElementById('#{title.downcase.tr(" .'", "_")}'));
+      chart.draw(data, {
+        displayAnnotations: true,
+        #{ " allValuesSuffix: ' #{ unit }'," if unit }
+        displayZoomButtons: false,
+        dateFormat: 'HH:mm MMMM dd, yyyy',
+        legendPosition: 'newRow',
+        scaleColumns: [0, 1],
+        #{ "scaleType: " + ((defined?(dual_axis) && ! dual_axis) ? "'maximized'," : "'allmaximized',") }
+        displayRangeSelector : true
+        });
+    }
+  %h2= link_to title, @chart_url || custom_graphite_path(target: graphite_request.target)
+  %div{ id: title.downcase.tr(" .'", "_"), style: "width: #{width}px; height: #{height}px;" }

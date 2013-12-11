@@ -4,6 +4,7 @@ Hacksaw::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   root 'application#index'
+  get 'member_activity' => 'application#member_activity', :as => 'member_activity'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'

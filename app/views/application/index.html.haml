@@ -21,14 +21,16 @@
     %th= "Servers Behaving"
     %td= "#{@servers_online}/#{@servers_total}"
   %tr
-    %th= "Current Slave Lag"
-    %td= "#{@current_slave_lag.round} ms"
+    %th= link_to "Current Slave Lag", custom_graphite_path(target: @slave_lag.target)
+    %td= "#{@slave_lag.value.round} ms"
   %tr
-    %th= "Taxon Overview Load Time"
-    %td= "#{@current_taxon_page_load_time.round} ms (trend #{@recent_taxon_page_load_time.round} ms)"
+    %th= link_to "Taxon Overview Load Time", custom_graphite_path(target: @taxa_page_load_time_data.target)
+    %td= "#{@taxa_page_load_time_data.value.round} ms (trend #{@recent_taxon_page_load_time.value.round} ms)"
   %tr
-    %th= "Search API Load Time"
-    %td= "#{@current_search_api_load_time.round} ms (trend #{@recent_search_api_load_time.round} ms)"
+    %th= link_to "Search API Load Time", custom_graphite_path(target: @current_search_api_load_time.target)
+    %td= "#{@current_search_api_load_time.value.round} ms (trend #{@recent_search_api_load_time.value.round} ms)"
+  %tr
+    %th= link_to "Site Member Stats", member_activity_path
   %tr
     %th= "See also"
     %td
@@ -37,15 +39,16 @@
         %li= link_to("Jiration", 'http://issues.eol.org/')
 #charts
   .left
-    = render partial: 'google_charts/annotated_time', locals: { chart_data: @taxa_page_load_time_data,
-      title: "Taxa Page Load Time", title2: "Recent Trend", width: 600, height: 400, dual_axis: false }
+    = render partial: 'google_charts/annotated_time', locals: { graphite_request: @taxa_page_load_time_data,
+      title: "Taxa Page Load Time", title2: "Recent Trend", width: 600, height: 400, dual_axis: false, unit: 'ms' }
   .right
-    = render partial: 'google_charts/annotated_time', locals: { chart_data: @home_page_load_time_data,
-      title: "Home Page Load Time", title2: "Recent Trend", width: 600, height: 400, dual_axis: false }
+    = render partial: 'google_charts/annotated_time', locals: { graphite_request: @home_page_load_time_data,
+      title: "Home Page Load Time", title2: "Recent Trend", width: 600, height: 400, dual_axis: false, unit: 'ms' }
   .left
-    = render partial: 'google_charts/annotated_time', locals: { chart_data: @api_searches,
+    = render partial: 'google_charts/annotated_time', locals: { graphite_request: @api_searches,
       title: "API Searches", width: 600, height: 400 }
   .right
-    = render partial: 'google_charts/annotated_time', locals: { chart_data: @slave_lag,
-      title: "Slave Lag", width: 600, height: 400 }
+    = render partial: 'google_charts/annotated_time', locals: { graphite_request: @all_errors,
+      title: "Errors", width: 600, height: 400 }
+
 = render partial: 'graphite/custom_form'

@@ -7,8 +7,7 @@ class GraphiteController < ActionController::Base
 
   def autocomplete_metrics
     term = params[:term]
-    g = Graphite.new(Hacksaw::Application.config.graphite_endpoint)
-    matches = g.all_possible_metrics
+    matches = GraphiteHost.connection.all_possible_metrics
     term.split(' ').each do |term|
       matches = matches.select{ |m| m.include?(term) }
     end
@@ -19,21 +18,24 @@ class GraphiteController < ActionController::Base
   end
 
   def custom
+    @chart_url = request.original_url
     @original_target = params[:target]
     @original_target2 = params[:target2]
+    if matches = @original_target.match(/(.*)&target=(.*)/)
+      @original_target = matches[1]
+    end
     @target = @original_target.dup
-    @target2 = @original_target2.dup
-    @from = params[:from] ||= "-1day"
+    @target2 = @original_target2.nil? ? nil: @original_target2.dup
+    @from = params[:from] ||= "-7day"
     @to = params[:to]
     @interval = params[:interval]
     unless @target.blank?
       unless @interval.blank?
-        @target = "movingAverage(#{@target},#{@interval})"
-        @target2 = "movingAverage(#{@target2},#{@interval})" unless @target2.blank?
+        @target = "movingAverage(#{@target},#{@interval})" unless @target.include?('movingAverage')
+        @target2 = "movingAverage(#{@target2},#{@interval})" unless @target2.blank? || @target2.include?('movingAverage')
       end
       @target << "&target=#{@target2}" unless @target2.blank?
-      g = Graphite.new(Hacksaw::Application.config.graphite_endpoint)
-      @chart_data = g.data_for_Google_annotated_time_chart(@target, from: @from, to: @to)
+      @graphite_request = GraphiteHost.connection.query(@target, from: @from, to: @to)
     end
   end
 

@@ -1,0 +1,20 @@
+%h1= "Member Activity"
+#charts
+  .left
+    = render partial: 'google_charts/annotated_time', locals: { graphite_request: @members_count,
+      title: "Users", width: 600, height: 400 }
+  .right
+    = render partial: 'google_charts/annotated_time', locals: { graphite_request: @content_partners,
+      title: "Content Partners", width: 600, height: 400 }
+  .left
+    = render partial: 'google_charts/annotated_time', locals: { graphite_request: @curators,
+      title: "Curators", width: 600, height: 400 }
+  .right
+    = render partial: 'google_charts/annotated_time', locals: { graphite_request: @active_curators,
+      title: "Active Curators", width: 600, height: 400 }
+  .left
+    = render partial: 'google_charts/annotated_time', locals: { graphite_request: @collections_count,
+      title: "Collections", width: 600, height: 400 }
+  .right
+    = render partial: 'google_charts/annotated_time', locals: { graphite_request: @communities_count,
+      title: "Communities", width: 600, height: 400 }
