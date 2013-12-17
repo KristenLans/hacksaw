@@ -41,7 +41,7 @@ group :doc do
 end
 
 group :development, :test do
-  gem 'debugger'
+#  gem 'debugger'
 end
 
 group :test do
