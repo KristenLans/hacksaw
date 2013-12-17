@@ -18,8 +18,14 @@
         = number_to_human(NewRelic.apdex.to_f, precision: 2)
         (now)
   %tr
-    %th= "Servers Behaving"
+    %th= "Servers Behaving Badly vol. 69"
     %td= "#{@servers_online}/#{@servers_total}"
+  %tr
+    %th= "Average Userpain"
+    %td= "#{@average_userpain.round(2)} (last quarter average 3.17)"
+  %tr
+    %th= link_to "Number of open bugs", 'http://issues.eol.org/?project=All'
+    %td= "EOL #{@eol_issue_count}, Content #{@content_issue_count}"
   %tr
     %th= link_to "Current Slave Lag", custom_graphite_path(target: @slave_lag.target)
     %td= "#{@slave_lag.value.round} ms"

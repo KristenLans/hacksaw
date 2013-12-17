@@ -29,6 +29,11 @@ class ApplicationController < ActionController::Base
       'movingAverage(stats.timers.page_load_time.api.search.mean_90,50)', from: '-1day')
     @all_errors = GraphiteHost.connection.query('movingAverage(stats.all_errors,50)', from: DEFAULT_TIME_RANGE)
     @slave_lag = GraphiteHost.connection.query('eol-db-slave1.mysql.general.slaveLag', from: '-1minute')
+    
+    jiration = Jiration.new
+    @average_userpain = jiration.average_userpain
+    @eol_issue_count = jiration.eol_issue_count
+    @content_issue_count = jiration.content_issue_count
   end
 
   def member_activity
